@@ -13,19 +13,27 @@ const CommentForm = ({ postId, onCommentAdded }) => {
 
     if (!content.trim()) return
 
+    // Check if postId is defined
+    if (!postId) {
+      console.error("Cannot comment: Post ID is undefined")
+      toast.error("Error: Cannot comment on this post")
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
+      console.log(`Submitting comment for post ${postId}`)
       const result = await createComment(postId, content)
 
       setContent("")
       toast.success("Your comment has been posted successfully")
 
-      if (onCommentAdded) {
+      if (onCommentAdded && result.comment) {
         onCommentAdded(result.comment)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to post comment")
+      toast.error("Failed to post comment. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -62,4 +70,3 @@ const CommentForm = ({ postId, onCommentAdded }) => {
 }
 
 export default CommentForm
-

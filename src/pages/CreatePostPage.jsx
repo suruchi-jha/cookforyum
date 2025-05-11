@@ -73,10 +73,17 @@ const CreatePostPage = () => {
         image: imageUrl,
       })
 
-      toast.success("Your cooking discussion has been published successfully")
-      navigate(`/posts/${result.postId}`)
+      console.log("Post creation result:", result)
+
+      if (result.success) {
+        toast.success("Your cooking discussion has been published successfully")
+        navigate(`/posts/${result.postId}`)
+      } else {
+        throw new Error(result.message || "Failed to create post")
+      }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create post")
+      console.error("Post creation error:", error)
+      toast.error("Failed to create post. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -220,4 +227,3 @@ const CreatePostPage = () => {
 }
 
 export default CreatePostPage
-

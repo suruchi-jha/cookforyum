@@ -2,7 +2,7 @@ import { formatDistanceToNow } from "date-fns"
 import { ThumbsUp, Flag } from "react-feather"
 
 const CommentList = ({ comments }) => {
-  if (comments.length === 0) {
+  if (!comments || comments.length === 0) {
     return (
       <div className="text-center py-8 bg-gray-50 rounded-lg">
         <p className="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
@@ -13,7 +13,7 @@ const CommentList = ({ comments }) => {
   return (
     <div className="space-y-6">
       {comments.map((comment) => (
-        <div key={comment.id} className="border-b border-gray-100 pb-6 last:border-0">
+        <div key={comment._id} className="border-b border-gray-100 pb-6 last:border-0">
           <div className="flex items-start gap-3">
             <img
               src={comment.author.avatar || `/placeholder.svg?height=40&width=40`}
@@ -48,4 +48,3 @@ const CommentList = ({ comments }) => {
 }
 
 export default CommentList
-

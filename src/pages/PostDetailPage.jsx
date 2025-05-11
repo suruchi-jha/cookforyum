@@ -27,18 +27,26 @@ const PostDetailPage = () => {
     const loadPostAndComments = async () => {
       try {
         setLoading(true)
-        const postData = await fetchPostById(Number.parseInt(id))
+        console.log("Fetching post with ID:", id)
+
+        if (!id) {
+          throw new Error("Invalid post ID")
+        }
+
+        const postData = await fetchPostById(id)
+        console.log("Fetched post data:", postData)
         setPost(postData)
 
-        const commentsData = await fetchCommentsByPostId(Number.parseInt(id))
+        const commentsData = await fetchCommentsByPostId(id)
         setComments(commentsData)
 
         if (user && postData) {
-          setIsAuthor(user && postData.author.id === user.id)
+          // Check if the current user is the author of the post
+          setIsAuthor(user && postData.author._id === user.id)
         }
       } catch (err) {
+        console.error("Error loading post and comments:", err)
         setError("Failed to load post details")
-        console.error(err)
       } finally {
         setLoading(false)
       }
@@ -49,7 +57,7 @@ const PostDetailPage = () => {
 
   useEffect(() => {
     if (user && post) {
-      setIsAuthor(user && post.author.id === user.id)
+      setIsAuthor(user && post.author._id === user.id)
     }
   }, [user, post])
 
@@ -64,7 +72,7 @@ const PostDetailPage = () => {
 
   const handleDelete = async () => {
     try {
-      await deletePost(post.id)
+      await deletePost(post._id)
       toast.success("Post deleted successfully")
       navigate("/")
     } catch (error) {
@@ -102,7 +110,6 @@ const PostDetailPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <PageTitle title={post.title} />
-      {/* Rest of the component */}
       {/* Breadcrumbs */}
       <div className="text-sm text-gray-500 mb-6">
         <Link to="/" className="hover:text-orange-500 transition-colors">
@@ -115,7 +122,7 @@ const PostDetailPage = () => {
       {/* Post Detail */}
       <div className="bg-white rounded-xl p-6 shadow-md">
         <div className="flex gap-4">
-          <VoteButtons postId={post.id} upvotes={post.upvotes} downvotes={post.downvotes} userVote={post.userVote} />
+          <VoteButtons postId={post._id} upvotes={post.upvotes} downvotes={post.downvotes} userVote={post.userVote} />
 
           <div className="flex-1">
             <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
@@ -145,7 +152,7 @@ const PostDetailPage = () => {
                 {isAuthor && (
                   <>
                     <Link
-                      to={`/edit-post/${post.id}`}
+                      to={`/edit-post/${post._id}`}
                       className="p-2 text-gray-500 hover:text-blue-500 hover:bg-blue-50 rounded-full transition-colors"
                       aria-label="Edit post"
                     >
@@ -165,8 +172,8 @@ const PostDetailPage = () => {
 
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
-                {post.tags.map((tag) => (
-                  <span key={tag} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
+                {post.tags.map((tag, index) => (
+                  <span key={`tag-${index}`} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs">
                     {tag}
                   </span>
                 ))}
@@ -200,7 +207,7 @@ const PostDetailPage = () => {
 
           {user ? (
             <div className="mb-8">
-              <CommentForm postId={post.id} onCommentAdded={handleNewComment} />
+              <CommentForm postId={post._id} onCommentAdded={handleNewComment} />
             </div>
           ) : (
             <div className="mb-8 p-4 bg-amber-50 rounded-lg text-center">
@@ -248,4 +255,3 @@ const PostDetailPage = () => {
 }
 
 export default PostDetailPage
-

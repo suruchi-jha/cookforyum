@@ -26,6 +26,7 @@ export const AuthProvider = ({ children }) => {
 
           // Update auth header for future requests
           api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+          console.log("Auth token set from storage:", token.substring(0, 15) + "...")
         }
       } catch (err) {
         console.error("Authentication error:", err)
@@ -46,6 +47,7 @@ export const AuthProvider = ({ children }) => {
 
       if (result.success) {
         setUser(result.user)
+        console.log("Login successful, user set:", result.user)
       }
 
       return result
@@ -77,6 +79,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
     // Clear Authorization header
     delete api.defaults.headers.common["Authorization"]
+    console.log("Logged out, auth header cleared")
   }
 
   return (
@@ -96,4 +99,3 @@ export const AuthProvider = ({ children }) => {
 }
 
 export default AuthContext
-

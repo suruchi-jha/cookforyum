@@ -15,6 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage"
 // Components
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import AuthDebug from "./components/AuthDebug"
 
 // Context
 import { AuthProvider, useAuth } from "./context/AuthContext"
@@ -68,6 +69,7 @@ function AppContent() {
         </Routes>
       </main>
       <Footer />
+      <AuthDebug />
       <ToastContainer
         position="bottom-right"
         autoClose={4000}
@@ -95,4 +97,3 @@ function App() {
 }
 
 export default App
-

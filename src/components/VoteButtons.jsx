@@ -26,8 +26,16 @@ const VoteButtons = ({ postId, upvotes, downvotes, userVote }) => {
 
     if (isVoting) return
 
+    // Check if postId is defined
+    if (!postId) {
+      console.error("Cannot vote: Post ID is undefined")
+      toast.error("Error: Cannot vote on this post")
+      return
+    }
+
     try {
       setIsVoting(true)
+      console.log(`Voting on post ${postId} with value ${value}`)
 
       // If user clicks the same vote button again, remove their vote
       const newValue = optimisticVote === value ? 0 : value
@@ -103,4 +111,3 @@ const VoteButtons = ({ postId, upvotes, downvotes, userVote }) => {
 }
 
 export default VoteButtons
-

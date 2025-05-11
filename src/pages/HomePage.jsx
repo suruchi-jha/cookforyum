@@ -21,13 +21,13 @@ const HomePage = () => {
     const loadPosts = async () => {
       try {
         setLoading(true)
-        // For now, we'll use the mock data from the API service
         const data = await fetchPosts(currentPage)
+        console.log("Fetched posts:", data) // Debug log
         setPosts(data)
         setTotalPages(Math.ceil(data.length / 10)) // Mock pagination
       } catch (err) {
+        console.error("Error loading posts:", err)
         setError("Failed to load posts")
-        console.error(err)
       } finally {
         setLoading(false)
       }

@@ -8,10 +8,10 @@ const PostList = ({ posts }) => {
     <div className="space-y-6">
       {posts.map((post) => (
         <div
-          key={post.id}
+          key={post._id}
           className="flex gap-4 p-5 border border-gray-100 rounded-xl hover:border-orange-200 transition-all duration-300 hover:shadow-md bg-white"
         >
-          <VoteButtons postId={post.id} upvotes={post.upvotes} downvotes={post.downvotes} userVote={post.userVote} />
+          <VoteButtons postId={post._id} upvotes={post.upvotes} downvotes={post.downvotes} userVote={post.userVote} />
 
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-1">
@@ -41,7 +41,7 @@ const PostList = ({ posts }) => {
               )}
 
               <div className={post.image ? "md:w-3/4" : "w-full"}>
-                <Link to={`/posts/${post.id}`} className="block group">
+                <Link to={`/posts/${post._id}`} className="block group">
                   <h3 className="text-lg font-semibold text-gray-800 group-hover:text-orange-600 transition-colors">
                     {post.title}
                   </h3>
@@ -57,8 +57,11 @@ const PostList = ({ posts }) => {
                   <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {post.tags.map((tag) => (
-                        <span key={tag} className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">
+                      {post.tags.map((tag, index) => (
+                        <span
+                          key={`${post._id}-tag-${index}`}
+                          className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs"
+                        >
                           {tag}
                         </span>
                       ))}
@@ -75,4 +78,3 @@ const PostList = ({ posts }) => {
 }
 
 export default PostList
-

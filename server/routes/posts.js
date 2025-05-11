@@ -96,13 +96,14 @@ router.get("/:id", async (req, res) => {
 // @access  Private
 router.post("/", auth, async (req, res) => {
   try {
-    const { title, content, tags } = req.body
+    const { title, content, tags, image } = req.body
 
     const newPost = new Post({
       title,
       content,
       author: req.user.id,
       tags: tags || [],
+      image: image || null,
     })
 
     const post = await newPost.save()
